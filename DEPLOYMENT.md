@@ -62,7 +62,15 @@ docker build -t dropsafe .
 docker run -p 8499:8499 -p 8501:8501 -p 8502:8502 -p 8504:8504 dropsafe
 ```
 
-### Option 3: Cloud Deployment (AWS/Heroku/Google Cloud)
+### Option 3: Cloud Deployment (Streamlit Cloud/AWS/Heroku/Google Cloud)
+
+#### Streamlit Cloud (Easiest Option)
+1. Fork this repository to your GitHub account
+2. Go to [Streamlit Community Cloud](https://streamlit.io/cloud)
+3. Create a new app and connect it to your forked repository
+4. Set the main file to `main_page.py`
+5. Use `requirements-streamlit.txt` as the requirements file
+6. Deploy and share your app!
 
 #### Heroku Deployment
 1. Install Heroku CLI

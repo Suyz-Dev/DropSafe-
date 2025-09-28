@@ -99,6 +99,14 @@ Follow the manual setup instructions above for local development and testing.
 
 ### Cloud Deployment
 
+#### Streamlit Cloud (Easiest Option)
+1. Fork this repository to your GitHub account
+2. Go to [Streamlit Community Cloud](https://streamlit.io/cloud)
+3. Create a new app and connect it to your forked repository
+4. Set the main file to `main_page.py`
+5. Use `requirements-streamlit.txt` as the requirements file
+6. Deploy and share your app!
+
 #### Heroku
 1. Install Heroku CLI
 2. Create separate Heroku apps for each service
