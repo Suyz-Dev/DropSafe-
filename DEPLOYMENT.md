@@ -68,9 +68,11 @@ docker run -p 8499:8499 -p 8501:8501 -p 8502:8502 -p 8504:8504 dropsafe
 1. Fork this repository to your GitHub account
 2. Go to [Streamlit Community Cloud](https://streamlit.io/cloud)
 3. Create a new app and connect it to your forked repository
-4. Set the main file to `main_page.py`
+4. Set the main file to `streamlit_main.py` (for simplified version) or `main_page.py` (for full version)
 5. Use `requirements-streamlit.txt` as the requirements file
 6. Deploy and share your app!
+
+**Note**: The full version (`main_page.py`) includes redirects to localhost services that won't work on Streamlit Cloud. For a complete experience, use the simplified version (`streamlit_main.py`) or deploy locally.
 
 #### Heroku Deployment
 1. Install Heroku CLI
