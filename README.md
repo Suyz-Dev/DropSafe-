@@ -46,6 +46,7 @@ A comprehensive **Machine Learning-powered platform** for identifying at-risk st
 - **Quick Actions**: Fast access to help and resources
 - **Feedback System**: Student satisfaction tracking
 - **Emergency Contacts**: Quick access to support resources
+- **Google Gemini Integration**: Advanced AI counseling powered by Google's Gemini model
 
 ### 🔧 **System Administration**
 - **Health Monitoring**: System status and dependency checks
@@ -53,6 +54,39 @@ A comprehensive **Machine Learning-powered platform** for identifying at-risk st
 - **Configuration**: Environment-specific settings
 - **Logging**: Comprehensive activity tracking
 - **Performance Metrics**: System and model performance monitoring
+
+## 🤖 Google Gemini Integration
+
+DropSafe now supports advanced AI counseling through Google Gemini! This integration enhances the student counseling experience with more sophisticated and contextual responses.
+
+### Setup Instructions
+
+1. **Get Google API Key**:
+   - Visit [Google AI Studio](https://aistudio.google.com/)
+   - Sign in with your Google account
+   - Create a new API key
+   - Copy the API key for later use
+
+2. **Configure the Application**:
+   - Set the `GOOGLE_API_KEY` environment variable
+   - Or run the setup script: `streamlit run setup_gemini.py`
+
+3. **Restart the Application**:
+   - The AI counselor will automatically use Gemini when the API key is configured
+
+### Features
+
+- **Enhanced Counseling Responses**: More natural and contextual conversations
+- **Personalized Support**: Tailored advice based on student concerns
+- **Fallback Mechanism**: Automatic fallback to local responses if Gemini is unavailable
+- **Privacy Focused**: All conversations are processed securely through Google's API
+
+### Benefits
+
+- More empathetic and human-like responses
+- Better understanding of complex student concerns
+- Improved mental health support quality
+- Seamless integration with existing counselor features
 
 ## 🚀 Deployment Options
 

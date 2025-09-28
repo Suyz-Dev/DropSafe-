@@ -8,8 +8,33 @@ import random
 from datetime import datetime
 from shared_data import shared_data_manager
 
+# Try to import Google Generative AI, with fallback to local responses
+try:
+    import google.generativeai as genai
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
+    genai = None
+
 class AIChatCounselor:
     def __init__(self):
+        # Initialize Gemini if available
+        self.gemini_model = None
+        if GEMINI_AVAILABLE:
+            try:
+                # Get API key from environment variable
+                import os
+                api_key = os.getenv("GOOGLE_API_KEY")
+                if api_key:
+                    genai.configure(api_key=api_key)
+                    # Initialize the model
+                    self.gemini_model = genai.GenerativeModel('gemini-pro')
+                else:
+                    st.warning("Google API key not found. Set GOOGLE_API_KEY environment variable for Gemini integration.")
+            except Exception as e:
+                st.warning(f"Gemini initialization failed: {str(e)}")
+                self.gemini_model = None
+        
         self.counselor_responses = {
             "greeting": [
                 "Hello! I'm here to listen and support you. How are you feeling today?",
@@ -100,6 +125,31 @@ class AIChatCounselor:
     
     def generate_response(self, message: str, student_name: str = "Student") -> str:
         """Generate appropriate counselor response"""
+        # Use Gemini if available and configured
+        if self.gemini_model is not None:
+            try:
+                # Create a prompt for Gemini with context
+                prompt = f"""
+                You are a compassionate and professional student counselor AI. 
+                A student named {student_name} has shared the following concern:
+                
+                "{message}"
+                
+                Please provide a supportive, empathetic, and helpful response. 
+                Consider the student's emotional state and offer appropriate guidance.
+                If the student is in crisis, recommend professional help.
+                Keep your response concise but meaningful, around 2-3 sentences.
+                """
+                
+                # Generate response using Gemini
+                response = self.gemini_model.generate_content(prompt)
+                if response and response.text:
+                    return response.text.strip()
+            except Exception as e:
+                # Fallback to local responses if Gemini fails
+                st.warning(f"Gemini response failed: {str(e)}")
+        
+        # Fallback to original local response generation
         category = self.analyze_message(message)
         base_response = random.choice(self.counselor_responses[category])
         
