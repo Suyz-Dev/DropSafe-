@@ -432,6 +432,82 @@ def live_risk_monitoring():
         st.info("📊 Waiting for data from Teacher Dashboard...")
         st.markdown("Risk monitoring will activate once teachers upload and assess student data.")
 
+def student_satisfaction_feedback():
+    """Display student satisfaction feedback from AI counselor"""
+    st.markdown("## 📊 Student Satisfaction Feedback")
+    st.markdown("Feedback from students about their AI counseling sessions")
+    
+    # Get feedback data
+    feedback_data = shared_data_manager.get_counselor_feedback()
+    
+    if not feedback_data:
+        st.info("No feedback received yet. Students will be able to provide feedback after their AI counseling sessions.")
+        return
+    
+    # Convert to DataFrame for easier handling
+    feedback_list = []
+    for student_id, feedback in feedback_data.items():
+        feedback_list.append({
+            'student_id': student_id,
+            'student_name': feedback.get('student_name', 'Unknown'),
+            'satisfaction': feedback.get('satisfaction', 'Unknown'),
+            'timestamp': feedback.get('timestamp', '')
+        })
+    
+    feedback_df = pd.DataFrame(feedback_list)
+    
+    # Summary metrics
+    total_feedback = len(feedback_df)
+    satisfied_count = len(feedback_df[feedback_df['satisfaction'] == 'satisfied'])
+    unsatisfied_count = len(feedback_df[feedback_df['satisfaction'] == 'unsatisfied'])
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.metric("Total Feedback", total_feedback)
+    
+    with col2:
+        st.metric("Satisfied", satisfied_count, 
+                 delta=f"{(satisfied_count/total_feedback)*100:.1f}%" if total_feedback > 0 else "0%",
+                 delta_color="normal")
+    
+    with col3:
+        st.metric("Unsatisfied", unsatisfied_count,
+                 delta=f"{(unsatisfied_count/total_feedback)*100:.1f}%" if total_feedback > 0 else "0%",
+                 delta_color="inverse")
+    
+    # Satisfaction trend chart
+    if not feedback_df.empty:
+        feedback_df['date'] = pd.to_datetime(feedback_df['timestamp']).dt.date
+        daily_feedback = feedback_df.groupby(['date', 'satisfaction']).size().reset_index(name='count')
+        
+        fig = px.bar(daily_feedback, 
+                     x='date', 
+                     y='count', 
+                     color='satisfaction',
+                     title="Daily Feedback Trend",
+                     color_discrete_map={'satisfied': '#10B981', 'unsatisfied': '#EF4444'})
+        st.plotly_chart(fig, use_container_width=True)
+    
+    # Detailed feedback table
+    st.markdown("### Detailed Feedback")
+    
+    # Prepare data for display
+    display_df = feedback_df[['student_name', 'satisfaction', 'timestamp']].copy()
+    display_df['satisfaction'] = display_df['satisfaction'].apply(
+        lambda x: "👍 Satisfied" if x == "satisfied" else "👎 Unsatisfied" if x == "unsatisfied" else x
+    )
+    display_df['timestamp'] = pd.to_datetime(display_df['timestamp']).dt.strftime('%Y-%m-%d %H:%M')
+    
+    # Sort by timestamp (newest first)
+    display_df = display_df.sort_values('timestamp', ascending=False)
+    
+    st.dataframe(display_df.rename(columns={
+        'student_name': 'Student Name',
+        'satisfaction': 'Feedback',
+        'timestamp': 'Session Time'
+    }), use_container_width=True)
+
 def priority_students(df, risk_filter):
     """Display priority students requiring immediate attention"""
     st.markdown("## 🚨 Priority Students")
@@ -686,6 +762,11 @@ def main():
     
     # Live risk monitoring section (NEW)
     live_risk_monitoring()
+    
+    st.markdown("---")
+    
+    # Student satisfaction feedback section
+    student_satisfaction_feedback()
     
     st.markdown("---")
     

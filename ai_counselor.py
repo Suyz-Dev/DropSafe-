@@ -235,6 +235,34 @@ class AIChatCounselor:
                 # Rerun to show new message
                 st.rerun()
         
+        # Satisfaction feedback buttons
+        st.markdown("---")
+        st.markdown("### 📝 Was this counseling session helpful?")
+        
+        # Check if feedback already exists
+        existing_feedback = shared_data_manager.get_student_feedback(student_id)
+        
+        if existing_feedback:
+            # Show existing feedback
+            satisfaction = existing_feedback.get("satisfaction", "")
+            if satisfaction == "satisfied":
+                st.success("✅ You marked this session as helpful. Thank you for your feedback!")
+            elif satisfaction == "unsatisfied":
+                st.warning("⚠️ You marked this session as not helpful. We'll work to improve.")
+        else:
+            # Show feedback buttons
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("👍 Yes, I'm satisfied", use_container_width=True, type="primary"):
+                    shared_data_manager.save_counselor_feedback(student_id, student_name, "satisfied")
+                    st.success("Thank you for your feedback! We're glad we could help.")
+                    st.rerun()
+            with col2:
+                if st.button("👎 No, I'm unsatisfied", use_container_width=True):
+                    shared_data_manager.save_counselor_feedback(student_id, student_name, "unsatisfied")
+                    st.warning("Thank you for your feedback. We'll work to improve our support.")
+                    st.rerun()
+        
         # Help resources
         with st.expander("🆘 Emergency Resources & Help"):
             st.markdown("""

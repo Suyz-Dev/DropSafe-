@@ -19,6 +19,11 @@ st.markdown("""
 <meta name="cache-control" content="no-cache, no-store, must-revalidate">
 """, unsafe_allow_html=True)
 
+# Health check endpoint
+if st.query_params.get("healthz"):
+    st.json({"status": "healthy", "timestamp": datetime.now().isoformat()})
+    st.stop()
+
 # Force refresh if needed
 if 'page_refresh' not in st.session_state:
     st.session_state.page_refresh = True

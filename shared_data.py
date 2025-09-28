@@ -15,6 +15,7 @@ class SharedDataManager:
         self.risk_alerts_file = os.path.join(self.data_dir, "risk_alerts.json")
         self.student_lists_file = os.path.join(self.data_dir, "student_lists.json")
         self.chat_history_file = os.path.join(self.data_dir, "chat_history.json")
+        self.feedback_file = os.path.join(self.data_dir, "counselor_feedback.json")
         
         # Create data directory if it doesn't exist
         os.makedirs(self.data_dir, exist_ok=True)
@@ -37,6 +38,9 @@ class SharedDataManager:
         
         if not os.path.exists(self.chat_history_file):
             self._save_json(self.chat_history_file, {})
+            
+        if not os.path.exists(self.feedback_file):
+            self._save_json(self.feedback_file, {})
     
     def _load_json(self, filepath: str) -> dict:
         """Load JSON data from file"""
@@ -128,6 +132,28 @@ class SharedDataManager:
         """Get chat history for student"""
         chat_data = self._load_json(self.chat_history_file)
         return chat_data.get(student_id, [])
+        
+    def save_counselor_feedback(self, student_id: str, student_name: str, satisfaction: str):
+        """Save student satisfaction feedback for counselor dashboard"""
+        feedback_data = self._load_json(self.feedback_file)
+        
+        # Create or update feedback entry
+        feedback_data[student_id] = {
+            "student_name": student_name,
+            "satisfaction": satisfaction,  # "satisfied" or "unsatisfied"
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        self._save_json(self.feedback_file, feedback_data)
+        
+    def get_counselor_feedback(self) -> dict:
+        """Get all counselor feedback for counselor dashboard"""
+        return self._load_json(self.feedback_file)
+        
+    def get_student_feedback(self, student_id: str) -> Optional[dict]:
+        """Get feedback for specific student"""
+        feedback_data = self._load_json(self.feedback_file)
+        return feedback_data.get(str(student_id))
 
 # Global instance
 shared_data_manager = SharedDataManager()

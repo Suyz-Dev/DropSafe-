@@ -264,14 +264,31 @@ python risk_model.py
 
 #### 5. Launch the System
 ```bash
-# Windows
+# Windows - Run individual dashboards or all at once
 run.bat
+# OR to run all dashboards simultaneously
+run_all.bat
 
 # Linux/Mac
 ./run.sh
+# OR to run all dashboards simultaneously
+./run_all.sh
 ```
 
 ## 🎯 Usage Guide
+
+### Run All Dashboards
+To run all dashboards simultaneously:
+- **Windows**: Double-click `run_all.bat` or run `python run_all_dashboards.py`
+- **Linux/Mac**: Run `./run_all.sh`
+
+This will start all dashboards on their respective ports:
+- Main Landing Page: http://localhost:8499
+- Login Portal: http://localhost:8500
+- Teacher Dashboard: http://localhost:8501
+- Enhanced Student Portal: http://localhost:8502
+- Original Student Portal: http://localhost:8503
+- Counsellor Dashboard: http://localhost:8504
 
 ### Teacher Dashboard
 1. **Launch**: Run `streamlit run teacher_dashboard.py` or use the launcher
@@ -352,6 +369,8 @@ dropsafe/
 ├── 📄 teacher_dashboard_demo.html # Demo interface
 ├── 🚀 run.bat                     # Windows launcher
 ├── 🚀 run.sh                      # Linux/Mac launcher
+├── 🚀 run_all.bat                 # Windows - Run all dashboards
+├── 🚀 run_all.sh                  # Linux/Mac - Run all dashboards
 ├── ⚙️ setup.bat                   # Windows automated setup
 ├── ⚙️ setup.sh                    # Linux/Mac automated setup
 ├── 📊 sample_students.csv         # Generated sample data
